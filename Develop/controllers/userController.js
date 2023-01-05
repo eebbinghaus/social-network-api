@@ -9,19 +9,23 @@ module.exports = {
 
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
-      .populate({ path: "thoughts" })
-      .populate({ path: "friends" })
+      .select('-__v')
+      // .populate({ path: "thoughts" })
+      // .populate({ path: "friends" })
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No user with that ID" })
           : res.json(user)
       )
-      .catch((err) => res.status(500).json(err));
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err)
+      });
   },
 
   createUser(req, res) {
     User.create(req.body)
-      .then((user) => res.json(user))
+      .then((user) => res.status(200).json(user))
       .catch((err) => res.status(500).json(err));
   },
 
@@ -49,7 +53,7 @@ module.exports = {
           ? res.status(404).json({ message: "No user with that ID" })
           : Thought.deleteMany({ _id: { $in: user.thoughts } })
       )
-      .then(() => res.json({ message: "User and associated apps deleted!" }))
+      .then(() => res.json({ message: "User and associated thoughts deleted!" }))
       .catch((err) => res.status(500).json(err));
   },
 

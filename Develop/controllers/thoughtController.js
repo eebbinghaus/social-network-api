@@ -1,4 +1,6 @@
-const { User, Thought } = require("../models");
+const { User, Thought } = require("../models");   // this IMPORT is looking for /models/index.js
+//const User = require('../models/User');
+
 
 module.exports = {
   getThoughts(req, res) {
@@ -7,9 +9,10 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   getSingleThought(req, res) {
-    User.findOne({ _id: req.params.userId })
+    console.log(req.params);
+    Thought.findOne({ _id: req.params.thoughtId })
       .then((thought) =>
-        !user
+        !thought
           ? res.status(404).json({ message: "No thought with that ID" })
           : res.json(thought)
       )
@@ -29,7 +32,7 @@ module.exports = {
           ? res.status(404).json({
               message: "Thought created, but found no user with that ID",
             })
-          : res.json("Created the Thought 🎉")
+          : res.json("Created the Thought")
       )
       .catch((err) => {
         console.log(err);
