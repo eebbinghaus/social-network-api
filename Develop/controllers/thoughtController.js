@@ -1,12 +1,14 @@
-const { User, Thought } = require("../models");   // this IMPORT is looking for /models/index.js
+const { User, Thought } = require("../models"); // this IMPORT is looking for /models/index.js
 //const User = require('../models/User');
-
 
 module.exports = {
   getThoughts(req, res) {
     Thought.find()
       .then((thoughts) => res.json(thoughts))
-      .catch((err) => res.status(500).json(err));
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
   },
   getSingleThought(req, res) {
     console.log(req.params);
